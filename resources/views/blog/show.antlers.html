@@ -1,0 +1,13 @@
+<div class="m-auto text-center alig">
+    <h2 class="p-8 text-teal-400 text-5xl">{{ title }}</h2>
+    <div class="flex justify-center">
+        <img src="{{ featured_image }}" alt="">
+    </div>
+    <div class="w-3/6 m-auto text-left p-4">
+        {{ blog_content }}
+    </div>
+    <div class="text-slate-400">
+        <p>Author: {{ author:name }}</p>
+        <p>Date: {{ date }}</p>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<nav class="p-4 bg-white text-black text-center shadow-xl w-full">
+    <p class="text-xl mb-4 underline">Blogsite</p>
+    <div class="flex items-center justify-between w-1/6 m-auto">
+        {{ nav:collection:pages }}
+        <ul class="list-none">
+            <li class="font-bold"><a href="{{ url }}">{{ title }}</a></li>
+            {{ if children }}
+                {{ children }}
+                <li><a href="{{ url }}">{{ title }}</a></li>
+                {{ /children }}
+            {{ /if }}
+        </ul>
+        {{ /nav:collection:pages }}
+    </div>
+</nav>

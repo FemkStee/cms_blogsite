@@ -1,0 +1,11 @@
+<article class="text-center mt-8">
+    <h1 class="text-xl font-bold">{{ title }}</h1> {{# title is "Blog" #}}
+    {{ content }}
+    {{ collection:blog }}
+    <div class="m-8">
+        <a href="{{ url }}" class="text-blue-500 hover:text-blue-700">{{ title }}</a>
+        <p>{{ author:name }}</p>
+        <p>{{ date }}</p>
+    </div>
+    {{ /collection:blog }}
+</article>
