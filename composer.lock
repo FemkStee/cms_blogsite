@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88337a197bd9098ea3816ea068857e9c",
+    "content-hash": "90c222c6afd685d1022d9513d91a88fa",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -1177,6 +1177,35 @@
                 "source": "https://github.com/facade/ignition-contracts/tree/1.0.2"
             },
             "time": "2020-10-16T08:27:54+00:00"
+        },
+        {
+            "name": "femst/like",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "addons/femst/like",
+                "reference": "bda74c9fffad36684f29a57d427e9e427ff6f8e5"
+            },
+            "type": "library",
+            "extra": {
+                "statamic": {
+                    "name": "Like",
+                    "description": "Like addon"
+                },
+                "laravel": {
+                    "providers": [
+                        "Femst\\Like\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Femst\\Like\\": "src"
+                }
+            },
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "fruitcake/php-cors",
@@ -11161,12 +11190,14 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "femst/like": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

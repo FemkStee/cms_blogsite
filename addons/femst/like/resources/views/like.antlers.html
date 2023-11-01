@@ -1,0 +1,91 @@
+<style>
+    .emojiform {
+        background-color: white;
+        margin: 2rem auto;
+        border-radius: 4px;
+        padding: 2rem;
+        width: 50%;
+    }
+    .emojiform__title {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    .emojiform__averageRating {
+        display: flex;
+        width: fit-content;
+        margin: 1rem auto;
+        background-color: rgb(242, 246, 255);
+        padding: 0 0.5rem;
+        border-radius: 1rem;
+        justify-content: center;
+        align-items: center;
+    }
+    .emojiform__averageRating-rating {
+        padding: 0 1rem;
+    }
+    .emoji-label {
+        font-size: 20px;
+        padding: 8px;
+    }
+    .emoji-label.selected {
+        font-size: 30px;
+        background-color: rgb(242, 246, 255);
+        border-radius: 50%;
+    }
+    .emojiform__submit {
+        background-color: rgb(242, 246, 255);
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        margin: 1rem 0 1rem 1rem;
+    }
+    .disabled {
+        cursor: not-allowed;
+    }
+</style>
+
+<section class="emojiform">
+    <h2 class="emojiform__title">Custom Reviews</h2>
+
+    <div class="emojiform__averageRating">
+        {{ if roundedAverageRating == "1" }}
+        <p class="emoji-label">&#x1F621</p>
+        {{ elseif roundedAverageRating == "2" }}
+        <p class="emoji-label">&#128533</p>
+        {{ elseif roundedAverageRating == "3" }}
+        <p class="emoji-label">&#x1F44D</p>
+        {{ elseif roundedAverageRating == "4" }}
+        <p class="emoji-label">&#x1F60A</p>
+        {{ elseif roundedAverageRating == "5" }}
+        <p class="emoji-label">&#x1F525</p>
+        {{ /if }}
+        <p class="emojiform__averageRating-rating">{{ averageRating }} of 5</p>
+    </div>
+
+    <form action="{{ route:statamic.like.store }}" method="POST" title="like form">
+        {{ csrf_field }}
+        <input type="hidden" name="entry_id" value="{{ id }}">
+        <input type="radio" id="rating1" name="rating" value="1" style="display: none;">
+        <input type="radio" id="rating2" name="rating" value="2" style="display: none;">
+        <input type="radio" id="rating3" name="rating" value="3" style="display: none;">
+        <input type="radio" id="rating4" name="rating" value="4" style="display: none;">
+        <input type="radio" id="rating5" name="rating" value="5" style="display: none;">
+    
+        <label for="rating1" class="emoji-label {{ valueRatingUser == 1 ? 'selected' : '' }}" onclick="selectRating(1)">&#x1F621</label>
+        <label for="rating2" class="emoji-label {{ valueRatingUser == 2 ? 'selected' : '' }}" onclick="selectRating(2)">&#128533</label> 
+        <label for="rating3" class="emoji-label {{ valueRatingUser == 3 ? 'selected' : '' }}" onclick="selectRating(3)">&#x1F44D</label>
+        <label for="rating4" class="emoji-label {{ valueRatingUser == 4 ? 'selected' : '' }}" onclick="selectRating(4)">&#x1F60A</label>
+        <label for="rating5" class="emoji-label {{ valueRatingUser == 5 ? 'selected' : '' }}" onclick="selectRating(5)">&#x1F525</label>
+        <input class="emojiform__submit" type="submit" value="Posten">
+    </form>
+
+</section>
+
+<script>
+    function selectRating(rating) {
+        const emojiLabels = document.querySelectorAll('.emoji-label');
+        emojiLabels.forEach(label => label.classList.remove('selected'));
+
+        const selectedLabel = document.querySelector(`[for="rating${rating}"]`);
+        selectedLabel.classList.add('selected');
+    }
+</script>

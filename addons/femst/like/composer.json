@@ -1,0 +1,19 @@
+{
+    "name": "femst/like",
+    "autoload": {
+        "psr-4": {
+            "Femst\\Like\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Like",
+            "description": "Like addon"
+        },
+        "laravel": {
+            "providers": [
+                "Femst\\Like\\ServiceProvider"
+            ]
+        }
+    }
+}
