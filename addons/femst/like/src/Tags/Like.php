@@ -13,16 +13,13 @@ class Like extends Tags
      * @return string|array
      */
 
-    public function getAverageRating()
+    public function getAverageRating($ratings)
     {
-        $settingsPath = resource_path('like/likes.yaml');
-        $existingSettings = YAML::parse(file_get_contents($settingsPath));
-
-        if (isset($existingSettings['ratings']) && is_array($existingSettings['ratings'])) {
-            $ratings = array_column($existingSettings['ratings'], 'rating');
-            $averageRating = count($ratings) > 0 ? array_sum($ratings) / count($ratings) : 0;
-
-            return $averageRating;
+        if (is_array($ratings)) {
+            $ratingsRating = array_column($ratings, 'rating');
+            $ratingAverage = count($ratingsRating) > 0 ? array_sum($ratingsRating) / count($ratingsRating) : 0;
+            $ratingAverage = round($ratingAverage);
+            return $ratingAverage;
         }
 
         return 0; // Geen beoordelingen gevonden, geef een standaardwaarde terug
@@ -52,43 +49,72 @@ class Like extends Tags
         return 0; // Geen beoordelingen gevonden, geef 0% terug
     }
 
-    public function checkIfIdExistsInYaml()
+    public function checkIfIdExistsInYaml($user_id, $ratings)
     {
-        // Lees de YAML-gegevens uit het opgegeven pad
-        $yamlPath = resource_path('like/likes.yaml');
-        $yamlData = YAML::parse(file_get_contents($yamlPath));
-        $user_id = $this->context->get('id')->value();
         $ratingForDesiredId = null;
-        $allIds = [];
+        $ratingValueForDesiredId = null;
 
-        if (isset($yamlData['ratings']) && is_array($yamlData['ratings'])) {
-            // Loop door de ratings en controleer of een "id" overeenkomt met $this->context->get('id')
-            foreach ($yamlData['ratings'] as $rating) {
-                $allIds[] = $rating['id'];
-            }
-        }
-
-        if (in_array($user_id, $allIds)) {
-            if (isset($yamlData['ratings']) && is_array($yamlData['ratings'])) {
-                foreach ($yamlData['ratings'] as $rating) {
-                    if (isset($rating['id']) && $rating['id'] === $user_id) {
-                        $ratingForDesiredId = $rating['rating'];
-                        break; // We hebben de overeenkomst gevonden, dus we kunnen de lus verlaten
-                    }
+        if (isset($ratings)) {
+            $ratingsForCurrentID = [];
+            foreach ($ratings as $rating) {
+                if ($rating['user_id'] == $user_id) {
+                    $ratingsForCurrentID[] = $rating;
                 }
             }
-            return $ratingForDesiredId;
+            if (count($ratingsForCurrentID) > 0) {
+                $ratingValueForDesiredId = $ratingsForCurrentID[0]['rating'];
+            }
         }
 
-        return $ratingForDesiredId;
+        return $ratingValueForDesiredId;
     }
 
     public function index()
     {
-        $averageRating = $this->getAverageRating();
-        $roundedAverageRating = floor($averageRating);
-        $valueRatingUser = $this->checkIfIdExistsInYaml();
-        return view('like::like', $this->context, compact('averageRating', 'roundedAverageRating', 'valueRatingUser'));
+        // haal entry id en ratings van de huidige entry op
+        $entry_id = $this->context->get('id')->value();
+        $yamlPath = resource_path('like/likes.yaml');
+        $yamlData = Yaml::parse(file_get_contents($yamlPath));
+
+        // vars
+        $user_id = 0; // id van huidige user
+        $averageRating = 0; // gemiddelde rating van entry
+        $valueRatingUser = null; // rating van huidige user als deze al een rating heeft gegeven
+        
+        session_start();
+
+        if (isset($_SESSION['user_id'])) {
+            $user_id = $_SESSION['user_id'];
+        } else {
+            // voorkomen dat er dubbele user id's worden aangemaakt
+            if(isset($yamlData['ratings'])) {
+                $ratings = $yamlData['ratings'];
+                $allUserIds = [];
+                foreach ($ratings as $rating) {
+                    $allUserIds[] = $rating['user_id'];
+                }
+            }            
+            do {
+                $_SESSION['user_id'] = rand(1, 1000000);
+                $user_id = $_SESSION['user_id'];
+            } while (in_array($user_id, $allUserIds));
+            
+        }
+
+        // ratings van huidige entry + gemiddelde rating + rating van huidige user
+        if (isset($yamlData['ratings'])) {
+            $ratings = $yamlData['ratings'];
+            $ratingsFromEntry = [];
+            foreach ($ratings as $rating) {
+                if ($rating['id'] === $entry_id) {
+                    $ratingsFromEntry[] = $rating;
+                }
+            }
+            $averageRating = $this->getAverageRating($ratingsFromEntry);
+            $valueRatingUser = $this->checkIfIdExistsInYaml($user_id, $ratingsFromEntry);
+        }
+
+        return view('like::like', $this->context, compact('averageRating', 'valueRatingUser'));
     }
 
     /**

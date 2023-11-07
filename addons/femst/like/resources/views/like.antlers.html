@@ -41,11 +41,13 @@
     .disabled {
         cursor: not-allowed;
     }
+    .voted {
+        color: red;
+    }
 </style>
 
 <section class="emojiform">
     <h2 class="emojiform__title">Custom Reviews</h2>
-
     <div class="emojiform__averageRating">
         {{ if roundedAverageRating == "1" }}
         <p class="emoji-label">&#x1F621</p>
@@ -69,13 +71,23 @@
         <input type="radio" id="rating3" name="rating" value="3" style="display: none;">
         <input type="radio" id="rating4" name="rating" value="4" style="display: none;">
         <input type="radio" id="rating5" name="rating" value="5" style="display: none;">
-    
-        <label for="rating1" class="emoji-label {{ valueRatingUser == 1 ? 'selected' : '' }}" onclick="selectRating(1)">&#x1F621</label>
-        <label for="rating2" class="emoji-label {{ valueRatingUser == 2 ? 'selected' : '' }}" onclick="selectRating(2)">&#128533</label> 
-        <label for="rating3" class="emoji-label {{ valueRatingUser == 3 ? 'selected' : '' }}" onclick="selectRating(3)">&#x1F44D</label>
-        <label for="rating4" class="emoji-label {{ valueRatingUser == 4 ? 'selected' : '' }}" onclick="selectRating(4)">&#x1F60A</label>
-        <label for="rating5" class="emoji-label {{ valueRatingUser == 5 ? 'selected' : '' }}" onclick="selectRating(5)">&#x1F525</label>
-        <input class="emojiform__submit" type="submit" value="Posten">
+
+        {{ if valueRatingUser }}
+            <label for="rating1" class="emoji-label disabled {{ valueRatingUser == 1 ? 'selected' : '' }}" >&#x1F621</label>
+            <label for="rating2" class="emoji-label disabled {{ valueRatingUser == 2 ? 'selected' : '' }}" >&#128533</label> 
+            <label for="rating3" class="emoji-label disabled {{ valueRatingUser == 3 ? 'selected' : '' }}" >&#x1F44D</label>
+            <label for="rating4" class="emoji-label disabled {{ valueRatingUser == 4 ? 'selected' : '' }}" >&#x1F60A</label>
+            <label for="rating5" class="emoji-label disabled {{ valueRatingUser == 5 ? 'selected' : '' }}" >&#x1F525</label>
+            <input class="emojiform__submit disabled" type="submit" value="Posten">
+            <p class="voted">You already voted. Thank you!</p>
+        {{ else }}
+            <label for="rating1" class="emoji-label {{ valueRatingUser == 1 ? 'selected' : '' }}" onclick="selectRating(1)">&#x1F621</label>
+            <label for="rating2" class="emoji-label {{ valueRatingUser == 2 ? 'selected' : '' }}" onclick="selectRating(2)">&#128533</label> 
+            <label for="rating3" class="emoji-label {{ valueRatingUser == 3 ? 'selected' : '' }}" onclick="selectRating(3)">&#x1F44D</label>
+            <label for="rating4" class="emoji-label {{ valueRatingUser == 4 ? 'selected' : '' }}" onclick="selectRating(4)">&#x1F60A</label>
+            <label for="rating5" class="emoji-label {{ valueRatingUser == 5 ? 'selected' : '' }}" onclick="selectRating(5)">&#x1F525</label>
+            <input class="emojiform__submit" type="submit" value="Posten">
+        {{ /if }}
     </form>
 
 </section>

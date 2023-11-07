@@ -1,34 +1,13 @@
 ratings:
   -
-    rating: '5'
-    id: 46650a82--4a48-b595-35d54c0b29b4
-  -
-    rating: '5'
-    id: 46650a82-2647--b595-35d54c0b29b4
-  -
     rating: '3'
-    id: 46650a82-2647-4a48-b595-
-  -
-    rating: '2'
     id: 46650a82-2647-4a48-b595-35d54c0b29b4
+    user_id: 920971
   -
-    rating: '4'
-    id: 46650a82-2647-4a48-b595-500
+    rating: '1'
+    id: 49592712-1d9b-4cbd-8167-b12ee859772e
+    user_id: 920971
   -
-    rating: null
+    rating: '1'
     id: 46650a82-2647-4a48-b595-35d54c0b29b4
-  -
-    rating: '4'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
-  -
-    rating: null
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
-  -
-    rating: '4'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
-  -
-    rating: '5'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
-  -
-    rating: '5'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
+    user_id: 920971

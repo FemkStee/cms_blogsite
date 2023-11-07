@@ -9,43 +9,34 @@ use Statamic\Entries\Entry;
 use Statamic\Facades\YAML;
 
 class LikeController extends Controller {
-    public function index()
-    {
-        $somedata = 'foobar';
-
-        return view('like::cp.settings', [
-            'somedata' => $somedata
-        ]);
-    }
 
     public function store(Request $request)
     {
+        session_start();
         $rating = $request->input('rating');
         $id = $request->input('entry_id');
-    
+        $user_id = $_SESSION['user_id'];
+        
         // Lees de bestaande YAML-gegevens
-        $settingsPath = resource_path('like/likes.yaml');
-        $existingSettings = Yaml::parse(file_get_contents($settingsPath));
-    
+        $yamlPath = resource_path('like/likes.yaml');
+        $yamlData = Yaml::parse(file_get_contents($yamlPath));
+        
         // Controleer of er al beoordelingen zijn, anders maak een lege array aan
-        if (!isset($existingSettings['ratings'])) {
-            $existingSettings['ratings'] = [];
+        if (!isset($yamlData['ratings'])) {
+            $yamlData['ratings'] = [];
         }
-    
+        
         // Voeg de nieuwe beoordeling en id toe aan de array
-        $existingSettings['ratings'][] = [
+        $yamlData['ratings'][] = [
             'rating' => $rating,
             'id' => $id,
+            'user_id' => $user_id
         ];
     
-        // Zet de bijgewerkte instellingen terug naar YAML
-        $updatedSettings = Yaml::dump($existingSettings);
-    
-        // Instellingen opslaan in het bestand
-        file_put_contents($settingsPath, $updatedSettings);
+        // Zet de bijgewerkte instellingen terug naar YAML en deze opslaan in bestand
+        $yamlUpdatedData = Yaml::dump($yamlData);
+        file_put_contents($yamlPath, $yamlUpdatedData);
+
         return back();
-    }
-    public function destroy(Request $request, $id)
-    {
     }
 }
