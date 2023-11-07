@@ -1,44 +1,60 @@
 <style>
     .dashboard {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
     }
-    .dashboard-container {
+    .dashboard-overview {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
     }
-    .dashboard-ratings {
-        text-align: center;
-        width: 50%;
+    .dashboard-overview-item {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        width: 10%;
+        color: #000;
     }
-    .dashboard-settings {
-        text-align: center;
-        width: 50%;
+    .card__entryId {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        width: 10%;
+        color: #000;
     }
-    .rating {
-        background-color: gainsboro;
-        width: 50%;
-        margin: 0.5rem auto;
-        border-radius: 8px;
-        padding: 0.25rem;
+    .card__entryId:hover {
+        background-color: #ccc;
+    }
+    .addbtn {
+        text-decoration: none;
+        color: #000;
+        font-size: 30px;
     }
 </style>
 <div class="dashboard">
     <h1 class="">Ratings Dashboard</h1>
-    <div class="dashboard-container">
-        <div class="dashboard-ratings">
-            <h2>Ratings</h2>
-            <div>
-                {{ ratings }}
-                <div class="rating">
-                    <p>{{ emojis[rating] }} ({{rating}})</p>
-                    <p>User : {{ id }}</p>
-                </div>
-                {{ /ratings }}
-            </div>
+    <div class="dashboard-overview">
+        <div class="dashboard-overview-item">
+            <p>Total Ratings</p>
+            <p>{{totalRatings}}</p>
         </div>
-        <div class="dashboard-settings">
-            <h2>Settings</h2>
+        <div class="dashboard-overview-item">
+            <p>Total Average Rating</p>
+            <p>{{averageRating}}</p>
+        </div>
+        <div class="dashboard-overview-item">
+            <p>Add New Rating</p>
+            <a class="addbtn" href="add">+</a>
         </div>
     </div>
-    {{ratings}}
+    <div>
+        <h2>All Entry's</h2>
+        {{ foreach:allEntryIds }}
+            <a class="card__entryId" href="/cp/like/{{value}}">{{value}}</a>
+        {{ /foreach:allEntryIds }}
+</div>
 </div>

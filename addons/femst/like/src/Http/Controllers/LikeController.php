@@ -4,17 +4,19 @@ namespace Femst\Like\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Statamic\Entries\Entry;
 use Statamic\Facades\YAML;
 
 class LikeController extends Controller {
 
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'rating' => 'required|integer|between:1,5',
+        ]);
+
         session_start();
         $rating = $request->input('rating');
-        $id = $request->input('entry_id');
+        $entry_id = $request->input('entry_id');
         $user_id = $_SESSION['user_id'];
         
         // Lees de bestaande YAML-gegevens
@@ -25,11 +27,15 @@ class LikeController extends Controller {
         if (!isset($yamlData['ratings'])) {
             $yamlData['ratings'] = [];
         }
+
+        // geef elke beoordeling een uniek id
+        $id = uniqid();
         
         // Voeg de nieuwe beoordeling en id toe aan de array
         $yamlData['ratings'][] = [
-            'rating' => $rating,
             'id' => $id,
+            'rating' => $rating,
+            'entry_id' => $entry_id,
             'user_id' => $user_id
         ];
     

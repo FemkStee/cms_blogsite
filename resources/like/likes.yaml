@@ -1,13 +1,11 @@
 ratings:
   -
+    id: 654a2b3f9ef08
     rating: '3'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
+    entry_id: 49592712-1d9b-4cbd-8167-b12ee859772e
     user_id: 920971
   -
-    rating: '1'
-    id: 49592712-1d9b-4cbd-8167-b12ee859772e
-    user_id: 920971
-  -
-    rating: '1'
-    id: 46650a82-2647-4a48-b595-35d54c0b29b4
-    user_id: 920971
+    id: 654a2b6b13300
+    rating: '3'
+    entry_id: test
+    user_id: test

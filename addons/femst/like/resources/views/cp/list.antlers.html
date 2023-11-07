@@ -1,0 +1,35 @@
+<style>
+    .dashboard {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+    }
+    .card {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-decoration: none;
+        width: 10%;
+        color: #000;
+    }
+    .card:hover {
+        background-color: #ccc;
+    }
+</style>
+<div class="dashboard">
+    <h1 class="">Ratings Dashboard</h1>
+    <div>
+        <h2>{{ slug }}</h2>
+        {{# TODO: what if no ratings #}}
+        {{ if ratings }}
+        {{ ratings }}
+            <div class="card">
+                <p>{{rating}}</p>
+                <p>User : {{ user_id }}</p>
+                <a href="edit/{{id}}">Edit</a>
+                <a href="/cp/like/delete/{{id}}">Delete</a>
+            </div>
+        {{ /ratings }}
+        {{ /if ratings}}
+</div>
+</div>

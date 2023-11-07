@@ -2,6 +2,7 @@
 
 namespace Femst\Like\Tags;
 
+use Femst\Like\Functions\Functions;
 use Statamic\Facades\YAML;
 use Statamic\Tags\Tags;
 
@@ -12,62 +13,6 @@ class Like extends Tags
      *
      * @return string|array
      */
-
-    public function getAverageRating($ratings)
-    {
-        if (is_array($ratings)) {
-            $ratingsRating = array_column($ratings, 'rating');
-            $ratingAverage = count($ratingsRating) > 0 ? array_sum($ratingsRating) / count($ratingsRating) : 0;
-            $ratingAverage = round($ratingAverage);
-            return $ratingAverage;
-        }
-
-        return 0; // Geen beoordelingen gevonden, geef een standaardwaarde terug
-    }
-
-    public function getPercentageOfReviewsByRating($targetRating)
-    {
-        $settingsPath = resource_path('like/likes.yaml');
-        $existingSettings = YAML::parse(file_get_contents($settingsPath));
-
-        if (isset($existingSettings['ratings']) && is_array($existingSettings['ratings'])) {
-            $totalReviews = count($existingSettings['ratings']);
-            $targetRatingCount = 0;
-
-            foreach ($existingSettings['ratings'] as $rating) {
-                if ($rating['rating'] == $targetRating) {
-                    $targetRatingCount++;
-                }
-            }
-
-            if ($totalReviews > 0) {
-                $percentage = ($targetRatingCount / $totalReviews) * 100;
-                return $percentage;
-            }
-        }
-
-        return 0; // Geen beoordelingen gevonden, geef 0% terug
-    }
-
-    public function checkIfIdExistsInYaml($user_id, $ratings)
-    {
-        $ratingForDesiredId = null;
-        $ratingValueForDesiredId = null;
-
-        if (isset($ratings)) {
-            $ratingsForCurrentID = [];
-            foreach ($ratings as $rating) {
-                if ($rating['user_id'] == $user_id) {
-                    $ratingsForCurrentID[] = $rating;
-                }
-            }
-            if (count($ratingsForCurrentID) > 0) {
-                $ratingValueForDesiredId = $ratingsForCurrentID[0]['rating'];
-            }
-        }
-
-        return $ratingValueForDesiredId;
-    }
 
     public function index()
     {
@@ -94,8 +39,9 @@ class Like extends Tags
                     $allUserIds[] = $rating['user_id'];
                 }
             }            
+            
             do {
-                $_SESSION['user_id'] = rand(1, 1000000);
+                $_SESSION['user_id'] = uniqid();
                 $user_id = $_SESSION['user_id'];
             } while (in_array($user_id, $allUserIds));
             
@@ -106,12 +52,12 @@ class Like extends Tags
             $ratings = $yamlData['ratings'];
             $ratingsFromEntry = [];
             foreach ($ratings as $rating) {
-                if ($rating['id'] === $entry_id) {
+                if ($rating['entry_id'] === $entry_id) {
                     $ratingsFromEntry[] = $rating;
                 }
             }
-            $averageRating = $this->getAverageRating($ratingsFromEntry);
-            $valueRatingUser = $this->checkIfIdExistsInYaml($user_id, $ratingsFromEntry);
+            $averageRating = Functions::getAverageRating($ratingsFromEntry);
+            $valueRatingUser = Functions::checkIfIdExistsInYaml($user_id, $ratingsFromEntry);
         }
 
         return view('like::like', $this->context, compact('averageRating', 'valueRatingUser'));
